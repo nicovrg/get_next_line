@@ -6,7 +6,7 @@
 /*   By: nivergne <nivergne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 17:10:20 by nivergne          #+#    #+#             */
-/*   Updated: 2018/11/16 22:01:30 by nivergne         ###   ########.fr       */
+/*   Updated: 2018/11/28 19:49:42 by nivergne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include "libft/libft.h"
 
-# define BUFF_SIZE 4096
+# define BUFF_SIZE 10000
 
-int     get_next_line(const int fd, char **line);
+int			get_next_line(const int fd, char **line);
 
 #endif

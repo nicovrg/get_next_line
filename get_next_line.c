@@ -6,73 +6,89 @@
 /*   By: nivergne <nivergne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 17:10:09 by nivergne          #+#    #+#             */
-/*   Updated: 2018/11/16 22:01:33 by nivergne         ###   ########.fr       */
+/*   Updated: 2018/11/29 01:35:49 by nivergne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char     *give_line(char *buff)
+static int	find_newline(char *store)
 {
-    size_t  i;
+	int	i;
 
-    i = 0;
-    while (buff[i] != '\n')
-        i++;
-    return (ft_strsub(buff, 0, i));
+	i = 0;
+	while (store[i] && store[i] != '\n')
+		i++;
+	if (store[i] == '\n')
+		return (i);
+	else
+		return (-1);
 }
 
-int             get_next_line(const int fd, char **line)
+static char	*join_free(char *store, char *buff)
 {
-    size_t          ret;
-    char            buff[BUFF_SIZE + 1];
-    static char     *store;
+	int		i;
+	int		j;
+	char	*join;
 
-    if (!(fd || line || fd > 3))
-        return (-1);
-    ret = 0;
-    store = malloc(1);
-    while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
-    {
-        buff[ret] = '\0';
-        store = ft_strjoin(store, buff);
-        printf("1 - %s\n", buff);    
-        if (ft_strchr(buff, '\n') != NULL)
-        {
-            *line = give_line(store);
-            return (1);
-        }
-    }
-    return (0);
+	i = 0;
+	j = 0;
+	if (store)
+		i = ft_strlen(store);
+	if (buff)
+		j = ft_strlen(buff);
+	if (!(join = (char *)malloc(sizeof(char) * (i + j + 1))))
+		return (NULL);
+	ft_memcpy(join, store, i);
+	ft_memcpy(join + i, buff, j);
+	join[i + j] = '\0';
+	free(store);
+	return (join);
 }
 
-
-int             main(int __unused ac, char **av)
+static int	assign_line(char **store, char **buff, char **line)
 {
-    int     fd;
-    char    *line;
-    if ((fd = open(av[1], O_RDONLY)) == -1)
-    {
-        ft_putstr("couldn't open file\n");
-        return (0);
-    }
-    get_next_line(fd, &line);
-    printf("3 - %s\n", line);
-    printf("4 - %d\n", get_next_line(fd, &line));
-    return (0);
+	int		index;
+	char	*tmp;
+
+	*store = join_free(*store, *buff);
+	index = find_newline(*store);
+	if (index != -1)
+	{
+		tmp = *store;
+		*line = ft_strsub(*store, 0, index);
+		*store = ft_strdup(*store + index + 1);
+		free(tmp);
+		return (1);
+	}
+	return (0);
 }
 
-/*
-** Relire tous les commentaires avant de rendre
-** Faire un join_free au lieu d un join
-** .
-** .
-** .
-** .
-** .
-** .
-** .
-** .
-** Virer le main
-** Verifier que author et auteur soit valide tous les deux
-*/
+int			get_next_line(const int fd, char **line)
+{
+	int				ret;
+	int				ret_2;
+	char			*buff;
+	static char		*store[OPEN_MAX];
+
+	buff = ft_strnew(BUFF_SIZE);
+	if (!line || BUFF_SIZE <= 0 || (ret = read(fd, buff, 0)) < 0)
+		return (-1);
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	{
+		ret_2 = assign_line(&store[fd], &buff, line);
+		ft_strdel(&buff);
+		if (ret_2 == 1)
+			return (1);
+		buff = ft_strnew(BUFF_SIZE);
+	}
+	if (assign_line(&store[fd], &buff, line) == 1)
+		return (1);
+	else if (ft_strlen(store[fd]) > 0)
+	{
+		*line = ft_strdup(store[fd]);
+		ft_strdel(&store[fd]);
+		return (1);
+	}
+	return (0);
+}
