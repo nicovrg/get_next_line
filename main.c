@@ -6,11 +6,11 @@
 /*   By: nivergne <nivergne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 13:40:17 by nivergne          #+#    #+#             */
-/*   Updated: 2018/11/29 22:26:56 by nivergne         ###   ########.fr       */
+/*   Updated: 2018/12/01 17:37:44 by nivergne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line/get_next_line.h"
+#include "get_next_line.h"
 
 /* Main basique */
 
