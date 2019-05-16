@@ -6,7 +6,7 @@
 /*   By: nivergne <nivergne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 17:10:09 by nivergne          #+#    #+#             */
-/*   Updated: 2019/05/15 19:00:08 by nivergne         ###   ########.fr       */
+/*   Updated: 2019/05/16 21:36:38 by nivergne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int			get_next_line(const int fd, char **line)
 
 	if (!line || BUFF_SIZE <= 0 || (ret = read(fd, buff, 0)) < 0)
 		return (-1);
+	bzero((void *)buff, BUFF_SIZE);
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		ret_2 = assign_line(&store[fd], buff, line);
