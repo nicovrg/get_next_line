@@ -6,7 +6,7 @@
 /*   By: nivergne <nivergne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 17:10:09 by nivergne          #+#    #+#             */
-/*   Updated: 2019/05/16 21:36:38 by nivergne         ###   ########.fr       */
+/*   Updated: 2019/05/20 17:12:21 by nivergne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,15 @@ int			get_next_line(const int fd, char **line)
 
 	if (!line || BUFF_SIZE <= 0 || (ret = read(fd, buff, 0)) < 0)
 		return (-1);
-	bzero((void *)buff, BUFF_SIZE);
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
+		buff[ret] = 0;
 		ret_2 = assign_line(&store[fd], buff, line);
-		bzero((void *)buff, BUFF_SIZE);
+		ft_bzero((void *)buff, BUFF_SIZE);
 		if (ret_2 == 1)
 			return (1);
 	}
+	ft_bzero((void *)buff, BUFF_SIZE);
 	if (assign_line(&store[fd], buff, line) == 1)
 		return (1);
 	else if (ft_strlen(store[fd]) > 0)
